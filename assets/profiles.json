@@ -1,0 +1,197 @@
+{
+  "profiles": [
+    {
+      "id": "profile_1",
+      "userProfile": {
+        "id": "user_1",
+        "email": "john@example.com",
+        "firstName": "John",
+        "lastName": "Doe",
+        "phoneNumber": "+49123456789",
+        "nationality": "German",
+        "age": 28,
+        "pictures": [
+          "https://picsum.photos/300/300?1",
+          "https://picsum.photos/300/300?2"
+        ],
+        "description": "Software engineer who loves traveling and photography."
+      },
+      "houseProfile": {
+        "id": "house_1",
+        "bedrooms": 2,
+        "bathrooms": 1,
+        "latitude": 52.5200,
+        "longitude": 13.4050,
+        "pictures": [
+          "https://picsum.photos/400/300?10",
+          "https://picsum.photos/400/300?11"
+        ],
+        "description": "Modern apartment in the heart of Berlin.",
+        "allowsPets": true,
+        "parkingAvailable": false
+      },
+      "locationProfile": {
+        "id": "location_1",
+        "description": "Trendy area with lots of cafes and parks.",
+        "country": "Germany",
+        "city": "Berlin",
+        "pictures": [
+          "https://picsum.photos/400/300?20"
+        ]
+      }
+    },
+    {
+      "id": "profile_2",
+      "userProfile": {
+        "id": "user_2",
+        "email": "emma@example.com",
+        "firstName": "Emma",
+        "lastName": "Rossi",
+        "phoneNumber": "+390987654321",
+        "nationality": "Italian",
+        "age": 24,
+        "pictures": [
+          "https://picsum.photos/300/300?3"
+        ],
+        "description": "Architecture student and coffee enthusiast."
+      },
+      "houseProfile": {
+        "id": "house_2",
+        "bedrooms": 1,
+        "bathrooms": 1,
+        "latitude": 45.4642,
+        "longitude": 9.1900,
+        "pictures": [
+          "https://picsum.photos/400/300?12"
+        ],
+        "description": "Cozy studio in Milan city center.",
+        "allowsPets": false,
+        "parkingAvailable": false
+      },
+      "locationProfile": {
+        "id": "location_2",
+        "description": "Close to metro and university area.",
+        "country": "Italy",
+        "city": "Milan",
+        "pictures": [
+          "https://picsum.photos/400/300?21"
+        ]
+      }
+    },
+    {
+      "id": "profile_3",
+      "userProfile": {
+        "id": "user_3",
+        "email": "li@example.com",
+        "firstName": "Li",
+        "lastName": "Wang",
+        "phoneNumber": "+8613812345678",
+        "nationality": "Chinese",
+        "age": 30,
+        "pictures": [
+          "https://picsum.photos/300/300?4",
+          "https://picsum.photos/300/300?5"
+        ],
+        "description": "Digital nomad and food blogger."
+      },
+      "houseProfile": {
+        "id": "house_3",
+        "bedrooms": 3,
+        "bathrooms": 2,
+        "latitude": 31.2304,
+        "longitude": 121.4737,
+        "pictures": [
+          "https://picsum.photos/400/300?13"
+        ],
+        "description": "Spacious apartment with skyline view.",
+        "allowsPets": true,
+        "parkingAvailable": true
+      },
+      "locationProfile": {
+        "id": "location_3",
+        "description": "Central business district with great nightlife.",
+        "country": "China",
+        "city": "Shanghai",
+        "pictures": [
+          "https://picsum.photos/400/300?22"
+        ]
+      }
+    },
+    {
+      "id": "profile_4",
+      "userProfile": {
+        "id": "user_4",
+        "email": "sarah@example.com",
+        "firstName": "Sarah",
+        "lastName": "Smith",
+        "phoneNumber": "+61400111222",
+        "nationality": "Australian",
+        "age": 35,
+        "pictures": [
+          "https://picsum.photos/300/300?6"
+        ],
+        "description": "Yoga teacher and animal lover."
+      },
+      "houseProfile": {
+        "id": "house_4",
+        "bedrooms": 4,
+        "bathrooms": 2,
+        "latitude": -33.8688,
+        "longitude": 151.2093,
+        "pictures": [
+          "https://picsum.photos/400/300?14"
+        ],
+        "description": "Family house near the beach.",
+        "allowsPets": true,
+        "parkingAvailable": true
+      },
+      "locationProfile": {
+        "id": "location_4",
+        "description": "Coastal area with amazing surf spots.",
+        "country": "Australia",
+        "city": "Sydney",
+        "pictures": [
+          "https://picsum.photos/400/300?23"
+        ]
+      }
+    },
+    {
+      "id": "profile_5",
+      "userProfile": {
+        "id": "user_5",
+        "email": "mohamed@example.com",
+        "firstName": "Mohamed",
+        "lastName": "Hassan",
+        "phoneNumber": "+201001234567",
+        "nationality": "Egyptian",
+        "age": 27,
+        "pictures": [
+          "https://picsum.photos/300/300?7"
+        ],
+        "description": "History lover and travel guide."
+      },
+      "houseProfile": {
+        "id": "house_5",
+        "bedrooms": 2,
+        "bathrooms": 1,
+        "latitude": 30.0444,
+        "longitude": 31.2357,
+        "pictures": [
+          "https://picsum.photos/400/300?15"
+        ],
+        "description": "Apartment near the Nile river.",
+        "allowsPets": false,
+        "parkingAvailable": true
+      },
+      "locationProfile": {
+        "id": "location_5",
+        "description": "Historic center close to museums and bazaars.",
+        "country": "Egypt",
+        "city": "Cairo",
+        "pictures": [
+          "https://picsum.photos/400/300?24"
+        ]
+      }
+    }
+  ]
+}
