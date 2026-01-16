@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:house_swipe/data/repository/data_sources/profile_local_data_source.dart';
+import 'package:house_swipe/data/repository/profile_repository_impl.dart';
+import 'package:house_swipe/features/profile/profile_screen.dart';
+import 'package:house_swipe/features/swiper/bloc/swiper_bloc.dart';
+import 'package:house_swipe/features/swiper/bloc/swiper_event.dart';
+import 'package:house_swipe/features/swiper/bloc/swiper_state.dart';
+import 'package:house_swipe/features/swiper/widgets/profile_card.dart';
 
 class SwiperScreen extends StatefulWidget {
   const SwiperScreen({super.key});
@@ -11,74 +19,105 @@ class SwiperScreen extends StatefulWidget {
 class _SwiperScreenState extends State<SwiperScreen> {
   final CardSwiperController controller = CardSwiperController();
 
-  final cards = candidates.map(ExampleCard.new).toList();
+  late final SwiperBloc _swiperBloc;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final repository = ProfileRepositoryImpl(
+      dataSource: ProfileLocalDataSource(),
+    );
+
+    _swiperBloc = SwiperBloc(repository: repository)
+      ..add(const FetchProfiles());
+  }
 
   @override
   void dispose() {
     controller.dispose();
+    _swiperBloc.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Flexible(
-              child: CardSwiper(
-                controller: controller,
-                cardsCount: cards.length,
-                allowedSwipeDirection: AllowedSwipeDirection.symmetric(
-                  horizontal: true,
-                  vertical: false,
-                ),
-                onSwipe: _onSwipe,
-                onUndo: _onUndo,
-                numberOfCardsDisplayed: 3,
-                backCardOffset: const Offset(32, 16),
-                padding: const EdgeInsets.all(24.0),
-                cardBuilder:
-                    (
-                      context,
-                      index,
-                      horizontalThresholdPercentage,
-                      verticalThresholdPercentage,
-                    ) => cards[index],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  FloatingActionButton(
-                    onPressed: controller.undo,
-                    child: const Icon(Icons.rotate_left),
-                  ),
-                  FloatingActionButton(
-                    onPressed: () => controller.swipe(CardSwiperDirection.left),
-                    child: const Icon(Icons.keyboard_arrow_left),
-                  ),
-                  FloatingActionButton(
-                    onPressed: () =>
-                        controller.swipe(CardSwiperDirection.right),
-                    child: const Icon(Icons.keyboard_arrow_right),
-                  ),
-                  FloatingActionButton(
-                    onPressed: () => controller.swipe(CardSwiperDirection.top),
-                    child: const Icon(Icons.keyboard_arrow_up),
-                  ),
-                  FloatingActionButton(
-                    onPressed: () =>
-                        controller.swipe(CardSwiperDirection.bottom),
-                    child: const Icon(Icons.keyboard_arrow_down),
-                  ),
-                ],
-              ),
-            ),
-          ],
+    return BlocProvider.value(
+      value: _swiperBloc,
+      child: Scaffold(
+        body: SafeArea(
+          child: BlocBuilder<SwiperBloc, SwiperState>(
+            builder: (context, state) {
+              if (state is SwiperLoading || state is SwiperInitial) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (state is SwiperError) {
+                return Center(child: Text(state.message));
+              }
+
+              if (state is SwiperLoaded) {
+                final profiles = state.profiles;
+
+                return Column(
+                  children: [
+                    Flexible(
+                      child: Hero(
+                        tag: "profile_button",
+                        child: CardSwiper(
+                          controller: controller,
+                          cardsCount: profiles.length,
+                          allowedSwipeDirection:
+                              const AllowedSwipeDirection.symmetric(
+                                horizontal: true,
+                                vertical: false,
+                              ),
+                          onSwipe: _onSwipe,
+                          onUndo: _onUndo,
+                          numberOfCardsDisplayed: 3,
+                          backCardOffset: const Offset(32, 16),
+                          padding: const EdgeInsets.all(24.0),
+                          cardBuilder:
+                              (
+                                context,
+                                index,
+                                horizontalThresholdPercentage,
+                                verticalThresholdPercentage,
+                              ) => ProfileCard(profiles[index]),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          FloatingActionButton(
+                            onPressed: _openProfileScreen,
+                            child: const Icon(Icons.person),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }
+
+              return const SizedBox();
+            },
+          ),
         ),
+      ),
+    );
+  }
+
+  void _openProfileScreen() {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 600),
+        reverseTransitionDuration: const Duration(milliseconds: 500),
+        opaque: false,
+        pageBuilder: (_, __, ___) => const ProfileScreen(),
       ),
     );
   }
@@ -101,114 +140,5 @@ class _SwiperScreenState extends State<SwiperScreen> {
   ) {
     debugPrint('The card $currentIndex was undod from the ${direction.name}');
     return true;
-  }
-}
-
-class ExampleCandidateModel {
-  final String name;
-  final String job;
-  final String city;
-  final List<Color> color;
-
-  ExampleCandidateModel({
-    required this.name,
-    required this.job,
-    required this.city,
-    required this.color,
-  });
-}
-
-final List<ExampleCandidateModel> candidates = [
-  ExampleCandidateModel(
-    name: 'One, 1',
-    job: 'Developer',
-    city: 'Areado',
-    color: const [Color(0xFFFF3868), Color(0xFFFFB49A)],
-  ),
-  ExampleCandidateModel(
-    name: 'Two, 2',
-    job: 'Manager',
-    city: 'New York',
-    color: const [Color(0xFF736EFE), Color(0xFF62E4EC)],
-  ),
-  ExampleCandidateModel(
-    name: 'Three, 3',
-    job: 'Engineer',
-    city: 'London',
-    color: const [Color(0xFF2F80ED), Color(0xFF56CCF2)],
-  ),
-  ExampleCandidateModel(
-    name: 'Four, 4',
-    job: 'Designer',
-    city: 'Tokyo',
-    color: const [Color(0xFF0BA4E0), Color(0xFFA9E4BD)],
-  ),
-];
-
-class ExampleCard extends StatelessWidget {
-  final ExampleCandidateModel candidate;
-
-  const ExampleCard(this.candidate, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.2),
-            spreadRadius: 3,
-            blurRadius: 7,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      alignment: Alignment.center,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Flexible(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: candidate.color,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  candidate.name,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  candidate.job,
-                  style: const TextStyle(color: Colors.grey, fontSize: 15),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  candidate.city,
-                  style: const TextStyle(color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

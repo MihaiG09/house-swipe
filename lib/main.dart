@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:house_swipe/features/swiper/swiper_screen.dart';
 
 void main() {
